@@ -15,7 +15,7 @@ const Login = () => {
           <PasswordInput/>
           <button type='submit' className='btn-primary'>Login</button>
           <p className='text-sm text-center mt-4' >
-            Not Registered yet? <Link to="/signup" className="font-medium text-primary underline">Ceate an account</Link>
+            Not Registered yet? <Link to="/SignUp" className="font-medium text-primary underline">Ceate an account</Link>
           </p>
           
 
