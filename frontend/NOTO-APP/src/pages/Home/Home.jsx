@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Navbar from "../../components/Navbar";
 
 const home = () => {
   return (
-    <div className="text-3xl font-bold text-blue-500 bg-red-600">
-      Home
-    </div>
-  )
-}
+    <>
+      <div>
+        <Navbar />
+      </div>
+    </>
+  );
+};
 
-export default home
+export default home;

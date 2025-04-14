@@ -1,24 +1,28 @@
-import React from 'react'
-import Home from './pages/Home/home';
-import Login from './pages/Login/Login'
-import SignUp from './pages/SignUp/SignUp'
-import './index.css'
-import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
+import React from "react";
+import Home from "./pages/Home/home";
+import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
+import "./index.css";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Router,
+  Navigate,
+} from "react-router-dom";
 const routes = (
-
-  
- <BrowserRouter>
-  <Routes>
-    <Route path='/dashboard' element={<Home />} />
-    <Route path='/login' element={<Login />} />
-    <Route path='/signup' element={<SignUp />} />
-  </Routes>
-</BrowserRouter>
-
-)
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/dashboard" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+    </Routes>
+  </BrowserRouter>
+);
 
 const App = () => {
-  return <div>{routes}</div>
-}
+  return <div>{routes}</div>;
+};
 
-export default App
+export default App;
