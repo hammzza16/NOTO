@@ -13,25 +13,35 @@ const NoteCard = ({
   onPinNote,
 }) => {
   return (
-    <div className="border rounded p-4 bg-white hover:shadow-xl transition-all ease-in">
+    <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 space-y-3 relative hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ease-in-out">
       <div className="">
-        <div>
-          <h5 className="text-1xl font-medium">{title}</h5>
-          <span className="text-sm text-slate-500">{date}</span>
+        <div className="flex justify-between items-start">
+          <div>
+            <h6 className="text-base font-semibold text-slate-800">{title}</h6>
+            <span className="text-xs text-slate-500">{date}</span>
+          </div>
         </div>
-        <MdOutlinePushPin className="" onClick={onPinNote} />
       </div>
-      <p className="">{content?.slice(0, 60)}</p>
-      <div className="">
-        <div className="text-sm text-slate-500">{tags}</div>
 
-        <div className="flex items-center gap-2">
+      <MdOutlinePushPin
+        className={`absolute top-3 right-3 text-xl text-slate-400 hover:text-yellow-700 cursor-pointer transition-colors duration-200 ${
+          isPinned ? "text-yellow-400" : ""
+        }`}
+        onClick={onPinNote}
+      />
+
+      <p className="text-sm text-slate-700">{content?.slice(0, 60)}...</p>
+
+      <div className="">
+        <div className="text-xs text-slate-500 italic">{tags}</div>
+
+        <div className="flex items-center gap-2 mt-2">
           <MdCreate
-            className="icon-btn hover:text-green-600 text-2xl"
+            className="icon-btn text-slate-600 hover:text-green-600 transition-colors duration-200 cursor-pointer"
             onClick={onEdit}
           />
           <MdDelete
-            className="icon-btn hover:text-red-500 text-2xl"
+            className="icon-btn text-slate-600 hover:text-red-500 transition-colors duration-200 cursor-pointer"
             onClick={onDelete}
           />
         </div>
