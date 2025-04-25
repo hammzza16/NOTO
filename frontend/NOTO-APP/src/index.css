@@ -18,6 +18,10 @@
   @apply text-xl text-slate-500 cursor-pointer hover:text-primary;
 }
 
+.input-label {
+  @apply text-xs text-slate-600;
+}
+
 @layer base {
   html {
     font-family: "Poppins", "Comic Neue", sans-serif;
