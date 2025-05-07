@@ -7,7 +7,10 @@ let mongoose = require("mongoose"); // Importing the mongoose library
 let jwt = require("jsonwebtoken"); // Importing the jsonwebtoken library
 let { authenticateToken } = require("./utilities"); // Importing the authenticateToken function from utilities.js
 let User = require("./models/user.model"); // Importing the User model from user.model.js
+let Note = require("./models/note.model"); //  Importing the Note model from note.model.js
+
 let app = express();
+
 app.use(cors({ origin: "*" }));
 app.use(bodyParser.json()); // Parse JSON request bodies
 
@@ -62,9 +65,50 @@ Whats Happening above
 6	Send back the user info and token as a response */
 });
 
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
+
+  const userInfo = await User.findOne({ email: email });
+
+  if (!userInfo) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  if (userInfo.email == email && userInfo.password == password) {
+    let user = { user: userInfo };
+    let accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "36000m",
+    });
+    return res.json({
+      error: false,
+      message: "Login Successful",
+      email,
+      accessToken,
+    });
+  } else {
+    return res.status(400).json({
+      error: true,
+      message: "Invalid Credentials",
+    });
+  }
+});
+
+app.post("/api/create-note", authenticateToken, async (req, res) => {
+  res.send("ALready logged in");
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from the API!" });
 });
