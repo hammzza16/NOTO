@@ -13,12 +13,10 @@ let schema = mongoose.Schema; // Importing the mongoose library and creating a s
 // The schema is then exported as a model named "User" using the mongoose.model() function
 //using the userSchema a new user document can be created in the MongoDB database
 let userSchema = new schema({
-  fullname: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  fullname: { type: String },
+  password: { type: String },
+  email: { type: String },
   createdon: { type: Date, default: new Date().getTime() },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("User", userSchema);
