@@ -7,14 +7,17 @@ import {
   Router,
   Navigate,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 
-const Navbar = () => {
+const Navbar = ({ userInfo }) => {
   let [searchQuery, setSearchQuery] = useState(""); //searchbar specific state
   let navigate = useNavigate();
-
+  let location = useLocation();
+  const isHomePage = location.pathname === "/dashboard";
   let onLogout = () => {
+    localStorage.clear();
     navigate("/login");
   };
 
@@ -27,15 +30,19 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between bg-white px-6 py-2 drop-shadow">
       <h2 className="text-2xl font-medium text-black py-2">NOTO</h2>
-      <SearchBar
-        value={searchQuery}
-        onChange={({ target }) => {
-          setSearchQuery(target.value);
-        }}
-        handleSearch={handleSearch}
-        onClearSearch={onClearSearch}
-      />
-      <ProfileInfo onLogout={onLogout} />
+      {isHomePage && (
+        <>
+          <SearchBar
+            value={searchQuery}
+            onChange={({ target }) => {
+              setSearchQuery(target.value);
+            }}
+            handleSearch={handleSearch}
+            onClearSearch={onClearSearch}
+          />
+          <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+        </>
+      )}
     </div>
   );
 };

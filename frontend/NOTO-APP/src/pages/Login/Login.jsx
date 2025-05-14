@@ -33,7 +33,6 @@ const Login = () => {
         email: email,
         password: password,
       });
-      console.log(response);
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
         navigate("/dashboard");

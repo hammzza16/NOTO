@@ -199,7 +199,7 @@ app.delete("/api/delete-note/:noteId", authenticateToken, async (req, res) => {
   let { user } = req.user;
   try {
     let note = await Note.findOne({ _id: noteID, userId: user._id });
-    console.log(note);
+    //console.log(note);
     if (!note) {
       return res.status(404).json({ error: true, message: "Note not found" });
     }
@@ -257,8 +257,9 @@ app.get("/api/get-user/", authenticateToken, async (req, res) => {
   return res.json({
     error: false,
     message: "User Found",
-    Name: isUser.fullname,
+    name: isUser.fullname,
     email: isUser.email,
+    id: isUser._id,
   });
 });
 
