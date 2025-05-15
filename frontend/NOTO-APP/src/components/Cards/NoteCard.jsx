@@ -1,5 +1,5 @@
 import React from "react";
-import { MdOutlinePushPin } from "react-icons/md";
+import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { MdCreate, MdDelete } from "react-icons/md";
 
 const NoteCard = ({
@@ -23,7 +23,7 @@ const NoteCard = ({
         </div>
       </div>
 
-      <MdOutlinePushPin
+      <MdPushPin
         className={`absolute top-3 right-3 text-xl text-slate-400 hover:text-yellow-700 cursor-pointer transition-colors duration-200 ${
           isPinned ? "text-yellow-400" : ""
         }`}
@@ -33,7 +33,9 @@ const NoteCard = ({
       <p className="text-sm text-slate-700">{content?.slice(0, 60)}...</p>
 
       <div className="">
-        <div className="text-xs text-slate-500 italic">{tags}</div>
+        <div className="text-xs text-slate-500 italic">
+          {tags.map((item) => `#${item} `)}
+        </div>
 
         <div className="flex items-center gap-2 mt-2">
           <MdCreate

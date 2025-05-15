@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
 import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
+import moment from "moment";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -15,6 +16,7 @@ const home = () => {
     data: null,
   });
   let [userInfo, setUserInfo] = useState("null");
+  let [allNotes, setAllNotes] = useState([]);
 
   let navigate = useNavigate();
 
@@ -33,8 +35,22 @@ const home = () => {
     }
   };
 
+  // Get all notes
+  const getAllNotes = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-notes");
+      console.log(response.data.notes);
+      if (response.data && response.data.notes) {
+        setAllNotes(response.data.notes);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
+    getAllNotes();
     return () => {};
   }, []);
 
@@ -44,16 +60,19 @@ const home = () => {
         <Navbar userInfo={userInfo} />
         <div className="container mx-auto">
           <div className="grid grid-cols-3 gap-4 mt-8">
-            <NoteCard
-              title="Meeting on 16th May"
-              date="15th April 2025"
-              content="A meeting to be taken place on 16th may"
-              tags="#meeting"
-              isPinned={true}
-              onEdit={() => {}}
-              onPinNote={() => {}}
-              onDelete={() => {}}
-            />
+            {allNotes.map((item, index) => (
+              <NoteCard
+                key={item._id}
+                title={item.title}
+                date={moment(item.createdOn).format("Do MM YYYY")}
+                content={item.content}
+                tags={item.tags}
+                isPinned={item.isPinned}
+                onEdit={() => {}}
+                onPinNote={() => {}}
+                onDelete={() => {}}
+              />
+            ))}
           </div>
         </div>
         <button
