@@ -3,6 +3,8 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import "./index.css";
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 import {
   BrowserRouter,
   Routes,

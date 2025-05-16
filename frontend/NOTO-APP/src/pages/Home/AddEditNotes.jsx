@@ -1,15 +1,41 @@
 import React, { useState } from "react";
 import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
+import axiosInstance from "../../utils/axiosInstance";
 
-const AddEditNotes = ({ onClose, noteData, type }) => {
+const AddEditNotes = ({ onClose, noteData, type, getAllNotes }) => {
   let [title, setTitle] = useState("");
   let [content, setContent] = useState("");
   let [tags, setTags] = useState([]);
   let [error, setError] = useState(null); // Error state
 
-  let addNewNote = async () => {};
+  let addNewNote = async () => {
+    console.log("Sending:", { title, content, tags });
+    try {
+      let response = await axiosInstance.post("/add-note", {
+        title,
+        content,
+        tags,
+      });
+      if (response.data && response.data.note) {
+        getAllNotes();
+        onClose();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message); // <-- FIXED LINE
+      } else {
+        setError("Something went wrong while adding the note."); // fallback
+      }
+    }
+  };
+
   let editNote = async () => {};
+
   let handleAddNote = () => {
     if (!title) {
       setError("Title is required"); // Set error state
@@ -19,6 +45,7 @@ const AddEditNotes = ({ onClose, noteData, type }) => {
       setError("Content is required"); // Set error state
       return; // Prevent further execution if content is empty
     }
+
     setError(""); // Reset error state
 
     if (type === "edit") {
