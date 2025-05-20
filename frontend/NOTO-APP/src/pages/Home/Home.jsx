@@ -48,9 +48,14 @@ const home = () => {
     }
   };
 
+  //passing onEdit function from Home to editcard component
+  let handleEdit = (noteDetails) => {
+    setopenAddEditModal({ isShown: true, type: "edit", data: noteDetails });
+  };
+
   useEffect(() => {
     getUserInfo();
-    getAllNotes();
+    getAllNotes(); // getting all the notes on the home page and storing it in a state variable named allNotes
     return () => {};
   }, []);
 
@@ -68,7 +73,7 @@ const home = () => {
                 content={item.content}
                 tags={item.tags}
                 isPinned={item.isPinned}
-                onEdit={() => {}}
+                onEdit={() => handleEdit(item)}
                 onPinNote={() => {}}
                 onDelete={() => {}}
               />
