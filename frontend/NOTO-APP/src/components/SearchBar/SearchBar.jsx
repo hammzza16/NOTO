@@ -10,7 +10,10 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
         placeholder="Search Notes"
         className="w-full text-s bg-transparent py-[11px] outline-none"
         value={value} //this part came from state
-        onChange={onChange}
+        onChange={(e) => {
+          onChange(e); // setSearchQuery(e.target.value)
+          handleSearch(); // filter notes immediately
+        }}
       />
 
       {value && (

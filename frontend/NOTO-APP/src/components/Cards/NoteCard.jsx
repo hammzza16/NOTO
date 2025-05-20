@@ -11,9 +11,13 @@ const NoteCard = ({
   onEdit,
   onDelete,
   onPinNote,
+  onClick,
 }) => {
   return (
-    <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 space-y-3 relative hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ease-in-out">
+    <div
+      className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 space-y-3 relative hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ease-in-out"
+      onClick={onClick}
+    >
       <div className="">
         <div className="flex justify-between items-start">
           <div>
