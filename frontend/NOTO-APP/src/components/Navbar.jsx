@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileInfo from "./Cards/profileInfo";
+import ProfileInfo from "./Cards/ProfileInfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 
