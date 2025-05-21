@@ -37,7 +37,7 @@ const home = () => {
     } catch (error) {
       if (error.response.status === 401) {
         localStorage.clear();
-        navigate("/login");
+        navigate("/LogReg");
       }
     }
   };
@@ -136,106 +136,102 @@ const home = () => {
   };
 
   return (
-    <>
-      <div>
-        <Navbar
-          userInfo={userInfo}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          handleSearch={handleSearch}
-          onClearSearch={onClearSearch}
-        />
-        <div className="container mx-auto">
-          <div className="grid grid-cols-3 gap-4 mt-8">
-            {filteredNotes.map((item, index) => (
-              <NoteCard
-                key={item._id}
-                title={item.title}
-                date={moment(item.createdOn).format("Do MM YYYY")}
-                content={item.content}
-                tags={item.tags}
-                isPinned={item.isPinned}
-                onEdit={() => handleEdit(item)}
-                onPinNote={() => handlePinNote(item)}
-                onClick={() => handleViewNote(item)}
-                onDelete={() => {
-                  handleDelete(item);
-                }}
-              />
-            ))}
-          </div>
+    <div className="w-screen h-screen">
+      <Navbar
+        userInfo={userInfo}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearch={handleSearch}
+        onClearSearch={onClearSearch}
+      />
+      <div className="container mx-auto">
+        <div className="grid grid-cols-3 gap-4 mt-8">
+          {filteredNotes.map((item, index) => (
+            <NoteCard
+              key={item._id}
+              title={item.title}
+              date={moment(item.createdOn).format("Do MM YYYY")}
+              content={item.content}
+              tags={item.tags}
+              isPinned={item.isPinned}
+              onEdit={() => handleEdit(item)}
+              onPinNote={() => handlePinNote(item)}
+              onClick={() => handleViewNote(item)}
+              onDelete={() => {
+                handleDelete(item);
+              }}
+            />
+          ))}
         </div>
-        <button
-          className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10"
-          onClick={() => {
-            setopenAddEditModal({
-              isShown: true,
-              type: "add",
-              data: null,
-            });
-          }}
-        >
-          <MdAdd className="text-[32px] text-white" />
-        </button>
-        <Modal
-          isOpen={openAddEditModal.isShown}
-          onRequestClose={() => {
-            setopenAddEditModal({ isShown: false, type: "add", data: null });
-          }}
-          style={{
-            overlay: {
-              backgroundColor: "rgba(0,0,0,0.2)",
-            },
-          }}
-          contentLabel=""
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg w-2/5 p-6 scroll-auto"
-        >
-          <AddEditNotes
-            type={openAddEditModal.type}
-            noteData={openAddEditModal.data}
-            onClose={() =>
-              setopenAddEditModal({ isShown: false, type: "add", data: null })
-            }
-            getAllNotes={getAllNotes}
-          />
-        </Modal>
-        <Modal
-          isOpen={viewNoteModal.isShown}
-          onRequestClose={() =>
-            setViewNoteModal({ isShown: false, data: null })
-          }
-          style={{
-            overlay: { backgroundColor: "rgba(0,0,0,0.2)" },
-          }}
-          contentLabel=""
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg w-2/5 p-6 scroll-auto"
-        >
-          {viewNoteModal.data && (
-            <div>
-              <h2 className="text-2xl font-semibold mb-2">
-                {viewNoteModal.data.title}
-              </h2>
-              <p className="text-sm text-gray-500 mb-4">
-                {moment(viewNoteModal.data.createdOn).format("Do MMMM YYYY")}
-              </p>
-              <p className="mb-4">{viewNoteModal.data.content}</p>
-              {viewNoteModal.data.tags?.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {viewNoteModal.data.tags.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 bg-gray-200 rounded text-sm text-gray-700"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </Modal>
       </div>
-    </>
+      <button
+        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10"
+        onClick={() => {
+          setopenAddEditModal({
+            isShown: true,
+            type: "add",
+            data: null,
+          });
+        }}
+      >
+        <MdAdd className="text-[32px] text-white" />
+      </button>
+      <Modal
+        isOpen={openAddEditModal.isShown}
+        onRequestClose={() => {
+          setopenAddEditModal({ isShown: false, type: "add", data: null });
+        }}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)",
+          },
+        }}
+        contentLabel=""
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg w-2/5 p-6 scroll-auto"
+      >
+        <AddEditNotes
+          type={openAddEditModal.type}
+          noteData={openAddEditModal.data}
+          onClose={() =>
+            setopenAddEditModal({ isShown: false, type: "add", data: null })
+          }
+          getAllNotes={getAllNotes}
+        />
+      </Modal>
+      <Modal
+        isOpen={viewNoteModal.isShown}
+        onRequestClose={() => setViewNoteModal({ isShown: false, data: null })}
+        style={{
+          overlay: { backgroundColor: "rgba(0,0,0,0.2)" },
+        }}
+        contentLabel=""
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg w-2/5 p-6 scroll-auto"
+      >
+        {viewNoteModal.data && (
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">
+              {viewNoteModal.data.title}
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              {moment(viewNoteModal.data.createdOn).format("Do MMMM YYYY")}
+            </p>
+            <p className="mb-4">{viewNoteModal.data.content}</p>
+            {viewNoteModal.data.tags?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {viewNoteModal.data.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2 py-1 bg-gray-200 rounded text-sm text-gray-700"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
+    </div>
   );
 };
 

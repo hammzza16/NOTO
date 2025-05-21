@@ -31,7 +31,11 @@ const NoteCard = ({
         className={`absolute top-3 right-3 text-xl text-slate-400 hover:text-yellow-700 cursor-pointer transition-colors duration-200 ${
           isPinned ? "text-yellow-400" : ""
         }`}
-        onClick={onPinNote}
+        //onClick={onPinNote}//
+        onClick={(e) => {
+          e.stopPropagation(); // <---- stop event bubbling here
+          onPinNote();
+        }}
       />
 
       <p className="text-sm text-slate-700">{content?.slice(0, 60)}...</p>
@@ -44,7 +48,11 @@ const NoteCard = ({
         <div className="flex items-center gap-2 mt-2">
           <MdCreate
             className=" text-xl text-slate-600 hover:text-green-600 transition-colors duration-200 cursor-pointer"
-            onClick={onEdit}
+            //onClick={onEdit}
+            onClick={(e) => {
+              e.stopPropagation(); // <---- stop event bubbling here
+              onEdit();
+            }}
           />
           <MdDelete
             className="hover:text-red-500 text-xl text-slate-600 transition-colors duration-200 cursor-pointer"

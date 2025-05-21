@@ -6,10 +6,14 @@ import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 
 const SignUp = () => {
-  let [Name, setName] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState(null);
+  const [name, setName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupError, setSignupError] = useState("");
+
   let navigate = useNavigate();
   let handleSignUp = async (e) => {
     //SignUp API CALL

@@ -16,11 +16,11 @@ const Navbar = ({
 
   const onLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/LogReg");
   };
 
   return (
-    <div className="flex items-center justify-between bg-white px-6 py-2 drop-shadow">
+    <div className="flex items-center justify-between bg-white px-6 py-2 drop-shadow ">
       <h2 className="text-2xl font-medium text-black py-2">NOTO</h2>
       {isHomePage && (
         <>

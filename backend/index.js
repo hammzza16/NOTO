@@ -11,7 +11,18 @@ let Note = require("./models/note.model"); //  Importing the Note model from not
 
 let app = express();
 
-app.use(cors({ origin: "*" }));
+const allowedOrigins = [
+  "http://localhost:5173", // Vite dev
+  "https://your-frontend.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json()); // Parse JSON request bodies
 
 mongoose
