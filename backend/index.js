@@ -1,19 +1,23 @@
-let express = require("express");
-let cors = require("cors");
-let bodyParser = require("body-parser");
+import express from "express";
+import cors from "cors";
+import { json } from "body-parser";
 require("dotenv").config(); // Load environment variables from .env file
-let config = require("./config.json"); // Load configuration file
-let mongoose = require("mongoose"); // Importing the mongoose library
-let jwt = require("jsonwebtoken"); // Importing the jsonwebtoken library
-let { authenticateToken } = require("./utilities"); // Importing the authenticateToken function from utilities.js
-let User = require("./models/user.model"); // Importing the User model from user.model.js
-let Note = require("./models/note.model"); //  Importing the Note model from note.model.js
+import { connectionString } from "./config.json"; // Load configuration file
+import { connect } from "mongoose"; // Importing the mongoose library
+import { sign } from "jsonwebtoken"; // Importing the jsonwebtoken library
+import { authenticateToken } from "./utilities"; // Importing the authenticateToken function from utilities.js
+import User, { findOne } from "./models/user.model"; // Importing the User model from user.model.js
+import Note, {
+  findOne as _findOne,
+  find,
+  deleteOne,
+} from "./models/note.model"; //  Importing the Note model from note.model.js
 
 let app = express();
 
 const allowedOrigins = [
   "http://localhost:5173", // Vite dev
-  "https://your-frontend.vercel.app",
+  "https://notoapp.vercel.app",
 ];
 
 app.use(
@@ -23,10 +27,9 @@ app.use(
   })
 );
 
-app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(json()); // Parse JSON request bodies
 
-mongoose
-  .connect(config.connectionString)
+connect(connectionString)
   .then(() => {
     console.log("Successfully connected to the database");
   })
@@ -42,7 +45,7 @@ app.post("/api/create-account", async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  let isUser = await User.findOne({ email });
+  let isUser = await findOne({ email });
 
   if (isUser) {
     return res.json({ message: "User already exists", error: true });
@@ -56,7 +59,7 @@ app.post("/api/create-account", async (req, res) => {
 
   await user.save();
 
-  let accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+  let accessToken = sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "3600000m",
   });
 
@@ -87,7 +90,7 @@ app.post("/api/login", async (req, res) => {
     return res.status(400).json({ message: "Password is required" });
   }
 
-  const userInfo = await User.findOne({ email: email });
+  const userInfo = await findOne({ email: email });
 
   if (!userInfo) {
     return res.status(400).json({ message: "User not found" });
@@ -95,7 +98,7 @@ app.post("/api/login", async (req, res) => {
 
   if (userInfo.email == email && userInfo.password == password) {
     let user = { user: userInfo };
-    let accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    let accessToken = sign(user, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "36000m",
     });
     return res.json({
@@ -161,7 +164,7 @@ app.put("/api/edit-note/:noteId", authenticateToken, async (req, res) => {
   }
 
   try {
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    const note = await _findOne({ _id: noteId, userId: user._id });
 
     if (!note) {
       return res.status(404).json({ error: true, message: "Note not found" });
@@ -190,7 +193,7 @@ app.get("/api/get-all-notes/", authenticateToken, async (req, res) => {
   const { user } = req.user;
 
   try {
-    const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1 });
+    const notes = await find({ userId: user._id }).sort({ isPinned: -1 });
 
     return res.json({
       error: false,
@@ -209,12 +212,12 @@ app.delete("/api/delete-note/:noteId", authenticateToken, async (req, res) => {
   let noteID = req.params.noteId;
   let { user } = req.user;
   try {
-    let note = await Note.findOne({ _id: noteID, userId: user._id });
+    let note = await _findOne({ _id: noteID, userId: user._id });
     //console.log(note);
     if (!note) {
       return res.status(404).json({ error: true, message: "Note not found" });
     }
-    await Note.deleteOne({ _id: noteID, userId: user._id });
+    await deleteOne({ _id: noteID, userId: user._id });
     return res.json({ error: false, message: "Note Deleted Successfully" });
   } catch (error) {
     return res
@@ -232,7 +235,7 @@ app.put(
     const { user } = req.user;
 
     try {
-      const note = await Note.findOne({ _id: noteId, userId: user._id });
+      const note = await _findOne({ _id: noteId, userId: user._id });
 
       if (!note) {
         return res.status(404).json({ error: true, message: "Note not found" });
@@ -259,7 +262,7 @@ app.put(
 app.get("/api/get-user/", authenticateToken, async (req, res) => {
   const { user } = req.user;
   console.log(user);
-  let isUser = await User.findOne({ _id: user._id });
+  let isUser = await findOne({ _id: user._id });
   console.log(isUser);
   if (!isUser) {
     return res.sendStatus(401);
@@ -286,4 +289,4 @@ app.listen(1605, () => {
   console.log("Server is running on port 1605");
 });
 
-module.exports = app;
+export default app;
