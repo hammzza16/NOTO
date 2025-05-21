@@ -4,7 +4,7 @@ import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import "./index.css";
 import Modal from "react-modal";
-import LoginRegister from "./pages/loginRegister/loginRegister";
+import LoginRegister from "./pages/loginRegister/LoginRegister";
 Modal.setAppElement("#root");
 import {
   BrowserRouter,
