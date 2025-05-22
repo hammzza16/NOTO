@@ -15,7 +15,7 @@ const NoteCard = ({
 }) => {
   return (
     <div
-      className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 space-y-3 relative hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ease-in-out"
+      className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 space-y-3 relative hover:shadow-xl hover:scale-[1.01] transition-all duration-300 ease-in-out min-h-[140px] min-w-[260px]"
       onClick={onClick}
     >
       <div className="">

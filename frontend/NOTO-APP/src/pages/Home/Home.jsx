@@ -131,6 +131,10 @@ const home = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery]);
+
   const handleViewNote = (note) => {
     setViewNoteModal({ isShown: true, data: note });
   };
