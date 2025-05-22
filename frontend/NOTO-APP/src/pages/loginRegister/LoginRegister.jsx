@@ -102,7 +102,7 @@ let LoginRegister = () => {
 
   return (
     <div className="bgimage">
-      <Components.Container>
+      <Components.Container className="">
         <Components.SignUpContainer signingIn={signIn}>
           <Components.Form onSubmit={handleSignUp}>
             <Components.Title>Create Account</Components.Title>

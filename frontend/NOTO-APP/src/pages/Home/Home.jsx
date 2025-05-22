@@ -136,16 +136,18 @@ const home = () => {
   };
 
   return (
-    <div className="w-screen h-screen">
-      <Navbar
-        userInfo={userInfo}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSearch={handleSearch}
-        onClearSearch={onClearSearch}
-      />
-      <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4 mt-8">
+    <div className="w-screen h-screen flex flex-col">
+      <div sticky top-0 z-50 bg-white shadow>
+        <Navbar
+          userInfo={userInfo}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+          onClearSearch={onClearSearch}
+        />
+      </div>
+      <div className="flex-1 overflow-y-auto h-[calc(100vh-64px)] px-6 py-4 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {filteredNotes.map((item, index) => (
             <NoteCard
               key={item._id}
@@ -165,7 +167,7 @@ const home = () => {
         </div>
       </div>
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 absolute right-10 bottom-10"
+        className="w-20 h-20 flex items-center justify-center rounded-2xl bg-primary text-white shadow-xl hover:bg-blue-600 hover:shadow-blue-400/50 active:scale-95 transition-all duration-300 ease-in-out group absolute right-10 bottom-10"
         onClick={() => {
           setopenAddEditModal({
             isShown: true,
@@ -174,8 +176,9 @@ const home = () => {
           });
         }}
       >
-        <MdAdd className="text-[32px] text-white" />
+        <MdAdd className="text-[32px] group-hover:rotate-90 transform transition-transform duration-300" />
       </button>
+
       <Modal
         isOpen={openAddEditModal.isShown}
         onRequestClose={() => {
