@@ -24,7 +24,7 @@ const NoteCard = ({
         <div className="flex justify-between items-start">
           <div>
             <h6 className="text-base font-semibold text-slate-800">
-              {title?.slice(0, 20)}...
+              {title?.length > 20 ? `${title.slice(0, 20)}...` : title}
             </h6>
             <span className="text-xs text-slate-500">{date}</span>
           </div>
@@ -42,7 +42,9 @@ const NoteCard = ({
         }}
       />
 
-      <p className="text-sm text-slate-700">{content?.slice(0, 60)}...</p>
+      <p className="text-sm text-slate-700">
+        {content?.length > 60 ? `${content.slice(0, 60)}...` : content}
+      </p>
 
       <div className="">
         <div className="text-xs text-slate-500 italic">

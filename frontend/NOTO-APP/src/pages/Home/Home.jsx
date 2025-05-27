@@ -171,7 +171,7 @@ const home = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <div sticky top-0 z-50 bg-white shadow>
+      <div className="sticky top-0 z-50 bg-white shadow">
         <Navbar
           userInfo={userInfo}
           searchQuery={searchQuery}
@@ -180,7 +180,7 @@ const home = () => {
           onClearSearch={onClearSearch}
         />
       </div>
-      <div className="flex-1 overflow-y-auto h-[calc(100vh-64px)] px-6 py-4 max-w-1/2 mx-auto">
+      <div className="flex-1 overflow-y-auto h-[calc(100vh-64px)] px-6 py-4 max-w-8xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {filteredNotes.map((item, index) => (
             <NoteCard
