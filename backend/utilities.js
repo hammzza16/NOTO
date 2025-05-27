@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"]; // Targeting the authorization header
@@ -18,6 +19,43 @@ function authenticateToken(req, res, next) {
   });
 }
 
+async function summarizeText(text) {
+  try {
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+      { inputs: text },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HF_API_TOKEN}`,
+        },
+        timeout: 30000,
+      }
+    );
+
+    // Response can be an array or an object depending on model status
+    if (Array.isArray(response.data) && response.data[0]?.summary_text) {
+      return response.data[0].summary_text;
+    }
+    if (response.data.summary_text) {
+      return response.data.summary_text;
+    }
+
+    // Model may be loading or return an error
+    if (response.data.error) {
+      return "Model is loading or unavailable. Please try again in a few seconds.";
+    }
+
+    return "No summary available.";
+  } catch (err) {
+    console.error(
+      "HuggingFace summarization error:",
+      err.response?.data || err.message
+    );
+    return "Error generating summary.";
+  }
+}
+
 module.exports = {
   authenticateToken,
+  summarizeText,
 };

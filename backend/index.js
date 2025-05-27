@@ -5,7 +5,7 @@ require("dotenv").config(); // Load environment variables from .env file
 let config = require("./config.json"); // Load configuration file
 let mongoose = require("mongoose"); // Importing the mongoose library
 let jwt = require("jsonwebtoken"); // Importing the jsonwebtoken library
-let { authenticateToken } = require("./utilities"); // Importing the authenticateToken function from utilities.js
+let { authenticateToken, summarizeText } = require("./utilities"); // Importing the authenticateToken function from utilities.js
 let User = require("./models/user.model"); // Importing the User model from user.model.js
 let Note = require("./models/note.model"); //  Importing the Note model from note.model.js
 
@@ -109,6 +109,24 @@ app.post("/api/login", async (req, res) => {
       error: true,
       message: "Invalid Credentials",
     });
+  }
+});
+
+app.post("/api/summarize-note/:noteId", authenticateToken, async (req, res) => {
+  const noteId = req.params.noteId;
+  const { user } = req.user;
+  try {
+    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    if (!note)
+      return res.status(404).json({ error: true, message: "Note not found" });
+
+    const summary = await summarizeText(note.content);
+    note.summary = summary;
+    await note.save();
+
+    res.json({ error: false, summary });
+  } catch (err) {
+    res.status(500).json({ error: true, message: "Failed to summarize note" });
   }
 });
 

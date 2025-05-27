@@ -7,6 +7,7 @@ import moment from "moment";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import SummaryModal from "../../components/modal/SummaryModal";
 
 const home = () => {
   //defining functions
@@ -23,6 +24,13 @@ const home = () => {
   let [viewNoteModal, setViewNoteModal] = useState({
     isShown: false,
     data: null,
+  });
+
+  const [summaryModal, setSummaryModal] = useState({
+    isOpen: false,
+    summary: "",
+    loading: false,
+    error: "",
   });
 
   let navigate = useNavigate();
@@ -107,6 +115,28 @@ const home = () => {
     }
   };
 
+  let handleSummariseNote = async (noteDetails) => {
+    setSummaryModal({ isOpen: true, summary: "", loading: true, error: "" });
+    try {
+      const res = await axiosInstance.post(
+        `/summarize-note/${noteDetails._id}`
+      );
+      setSummaryModal({
+        isOpen: true,
+        summary: res.data.summary,
+        loading: false,
+        error: "",
+      });
+    } catch (err) {
+      setSummaryModal({
+        isOpen: true,
+        summary: "",
+        loading: false,
+        error: "Could not summarize note.",
+      });
+    }
+  };
+
   const handleSearch = () => {
     const filtered = allNotes.filter(
       (note) =>
@@ -150,7 +180,7 @@ const home = () => {
           onClearSearch={onClearSearch}
         />
       </div>
-      <div className="flex-1 overflow-y-auto h-[calc(100vh-64px)] px-6 py-4 max-w-7xl mx-auto">
+      <div className="flex-1 overflow-y-auto h-[calc(100vh-64px)] px-6 py-4 max-w-1/2 mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {filteredNotes.map((item, index) => (
             <NoteCard
@@ -163,6 +193,7 @@ const home = () => {
               onEdit={() => handleEdit(item)}
               onPinNote={() => handlePinNote(item)}
               onClick={() => handleViewNote(item)}
+              onSummarise={() => handleSummariseNote(item)}
               onDelete={() => {
                 handleDelete(item);
               }}
@@ -238,6 +269,13 @@ const home = () => {
           </div>
         )}
       </Modal>
+      <SummaryModal
+        isOpen={summaryModal.isOpen}
+        summary={summaryModal.summary}
+        loading={summaryModal.loading}
+        error={summaryModal.error}
+        onClose={() => setSummaryModal({ ...summaryModal, isOpen: false })}
+      />
     </div>
   );
 };

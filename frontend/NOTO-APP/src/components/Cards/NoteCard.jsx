@@ -1,6 +1,7 @@
 import React from "react";
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { MdCreate, MdDelete } from "react-icons/md";
+import { AiFillOpenAI } from "react-icons/ai";
 
 const NoteCard = ({
   title,
@@ -12,6 +13,7 @@ const NoteCard = ({
   onDelete,
   onPinNote,
   onClick,
+  onSummarise,
 }) => {
   return (
     <div
@@ -21,7 +23,9 @@ const NoteCard = ({
       <div className="">
         <div className="flex justify-between items-start">
           <div>
-            <h6 className="text-base font-semibold text-slate-800">{title}</h6>
+            <h6 className="text-base font-semibold text-slate-800">
+              {title?.slice(0, 20)}...
+            </h6>
             <span className="text-xs text-slate-500">{date}</span>
           </div>
         </div>
@@ -56,7 +60,17 @@ const NoteCard = ({
           />
           <MdDelete
             className="hover:text-red-500 text-xl text-slate-600 transition-colors duration-200 cursor-pointer"
-            onClick={onDelete}
+            onClick={(e) => {
+              e.stopPropagation(); // <---- stop event bubbling here
+              onDelete();
+            }}
+          />
+          <AiFillOpenAI
+            className="hover:text-blue-500 text-xl text-slate-600 transition-colors duration-200 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation(); // <---- stop event bubbling here
+              onSummarise();
+            }}
           />
         </div>
       </div>
